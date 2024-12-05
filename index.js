@@ -560,23 +560,27 @@ function cycle() {
       gameOver(); 
       stopPressed = false;
       isStop = false;
-      return undefined;
     }, 200)
     timeOut()
+    enemy.x = 0;
+    enemy.y = 0;
+    return undefined;
   }
-    
-  if (path.length >= 4) {
-    enemy.x = path[frameCount % 4].x;
-    enemy.y = path[frameCount % 4].y;
-  } else if (path.length == 3) {
-    enemy.x = path[frameCount % 3].x;
-    enemy.y = path[frameCount % 3].y;
-  }else if (path.length == 2) {
-    enemy.x = path[frameCount % 2].x;
-    enemy.y = path[frameCount % 2].y;
-  }else if (path.length == 1) {
-    enemy.x = path[0].x;
-    enemy.y = path[0].y;
+  
+  if (frameCount > 10) {
+    if (path.length >= 4) {
+      enemy.x = path[frameCount % 4].x;
+      enemy.y = path[frameCount % 4].y;
+    } else if (path.length == 3) {
+      enemy.x = path[frameCount % 3].x;
+      enemy.y = path[frameCount % 3].y;
+    }else if (path.length == 2) {
+      enemy.x = path[frameCount % 2].x;
+      enemy.y = path[frameCount % 2].y;
+    }else if (path.length == 1) {
+      enemy.x = path[0].x;
+      enemy.y = path[0].y;
+    }
   }
 
   if (keyDown.w && player.y > 0 && !map[player.x][player.y-1].isObs) {
