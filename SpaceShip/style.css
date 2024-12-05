@@ -1,0 +1,45 @@
+body {
+    background-color: #edc798;
+}
+
+.field {
+    padding-top: 10px;
+}
+canvas {
+    border-style: solid;
+    border-width: 10px;
+    margin: auto;
+    display: block;
+}
+
+.grid-container {
+    justify-content: center;
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(3, 160px);
+    grid-gap: 25px;
+    padding: 10px;
+}
+
+.box {
+    padding: 10px 5px;
+    background-color: #e6905e;
+    font: bold 20px Verdana;
+    text-align: center;
+    box-shadow: 5px 5px 1px #000;
+    border: 2px solid #545454;
+}
+
+button {
+    transition: all 0.1s ease;
+}
+
+button:hover {
+    cursor: pointer;
+    background-color: #e6905e;
+    transform: scale(1.05);
+}
+
+button:active {
+    background-color: #e8844a
+}
