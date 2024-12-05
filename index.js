@@ -50,8 +50,6 @@ let pixel_size = cnvsSize / RESOLUTION;
 let path_size = cnvsSize / (RESOLUTION * GRID_SIZE);
 let num_pixels = GRID_SIZE / RESOLUTION;
 let buffer = 125
-let isReset = true
-let resetHappening = false
 
 function newMap() {
   perlin.seed();
@@ -101,35 +99,6 @@ function checkGoals() {
   search(map, map[0][0], map[mapSize-1][mapSize-1]);
   search(map, map[0][0], map[0][mapSize-1]);
   search(map, map[0][0], map[mapSize-1][0]);
-}
-
-function reset() {
-  isReset = true;
-  resetHappening = true;
-  resetMap();
-  ctx.clearRect(0,0,cnvsSize,cnvsSize);
-  newMap();
-  checkGoals();
-
-  resetHappening = false;
-}
-
-function start() {
-  if (!resetHappening && isReset) {
-    frameCount = 0;
-    score = 1000;
-    player.x = mapSize-1;
-    player.y = mapSize-1;
-    enemy.x = 0;
-    enemy.y = 0;
-    goals.topLeft = false;
-    goals.topRight = false;
-    goals.bottomLeft = false;
-
-    isReset = false;
-
-    requestAnimationFrame(cycle);
-  }
 }
 
 // ----Visuals----
@@ -363,7 +332,7 @@ function search(map, start, end) {
   return ret.reverse();
 }
 
-// ----player----
+// ----functionality----
 
 // define player object
 let player = {
@@ -424,6 +393,44 @@ window.addEventListener("keyup", function(event) {
   }
 });
 
+let isStop = false
+let resetHappening = false
+let stopPressed = false
+
+document.getElementById("start").addEventListener("click", () => {
+  if (!resetHappening && !isStop) {
+    document.getElementById("reset").innerHTML = "Stop"
+    frameCount = 0;
+    score = 1000;
+    player.x = mapSize-1;
+    player.y = mapSize-1;
+    enemy.x = 0;
+    enemy.y = 0;
+    goals.topLeft = false;
+    goals.topRight = false;
+    goals.bottomLeft = false;
+
+    isStop = true;
+
+    requestAnimationFrame(cycle);
+  }
+});
+
+document.getElementById("reset").addEventListener("click", () => {
+  if (!isStop) {
+    isStop = false;
+    resetHappening = true;
+    resetMap();
+    ctx.clearRect(0,0,cnvsSize,cnvsSize);
+    newMap();
+    checkGoals();
+
+    resetHappening = false;
+  } else {
+    stopPressed = true;
+  }
+});
+
 let frameCount = 0;
 let score = 1000;
 let timer = document.getElementById("timer")
@@ -434,15 +441,10 @@ function cycle() {
   resetMap();
   frameCount++;
 
-  if (isReset) {
-    isReset = false;
-    return undefined
-  }
-
   // check for win
   if (goals.bottomLeft && goals.topLeft && goals.topRight) {
     win()
-    return undefined
+    return undefined;
   }
 
   // draw goals
@@ -551,10 +553,13 @@ function cycle() {
     path = search(map, map[enemy.x][enemy.y], map[player.x][player.y]);
   }
 
-  if ((enemy.x == player.x && enemy.y == player.y) || score == 0) {
+  if ((enemy.x == player.x && enemy.y == player.y) || score == 0 || stopPressed) {
+    document.getElementById("reset").innerHTML = "Reset"
     const timeOut = setTimeout(() => {
       timer.innerHTML = `Loser`
       gameOver(); 
+      stopPressed = false;
+      isStop = false;
       return undefined;
     }, 200)
     timeOut()
@@ -574,18 +579,18 @@ function cycle() {
     enemy.y = path[0].y;
   }
 
-    if (keyDown.w && player.y > 0 && !map[player.x][player.y-1].isObs) {
-      player.y--
-    }
-    if (keyDown.a && player.x > 0 && !map[player.x-1][player.y].isObs) {
-      player.x--
-    }
-    if (keyDown.s && player.y < mapSize-1 && !map[player.x][player.y+1].isObs) {
-      player.y++
-    }
-    if (keyDown.d && player.x < mapSize-1 && !map[player.x+1][player.y].isObs) {
-      player.x++
-    }
+  if (keyDown.w && player.y > 0 && !map[player.x][player.y-1].isObs) {
+    player.y--
+  }
+  if (keyDown.a && player.x > 0 && !map[player.x-1][player.y].isObs) {
+    player.x--
+  }
+  if (keyDown.s && player.y < mapSize-1 && !map[player.x][player.y+1].isObs) {
+    player.y++
+  }
+  if (keyDown.d && player.x < mapSize-1 && !map[player.x+1][player.y].isObs) {
+    player.x++
+  }
 
   requestAnimationFrame(cycle);
 }
