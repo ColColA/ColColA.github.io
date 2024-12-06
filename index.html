@@ -4,11 +4,23 @@
         <link rel="stylesheet" href="style.css">
     </head>
     <body>
+        <div class="grid-container options">
+            <div class="box">
+                The Perlin Game
+            </div>
+            <div class="box" class="options">
+                <label class="switch">
+                    <input type="checkbox" id="difficulty-slider">
+                    <span class="slider"></span>
+                </label>
+                <span id="difficulty-tag"">Easy</span>
+            </div>
+        </div>
         <div class="field">
             <canvas id="cnvs" class="canvas"></canvas>
         </div>
         <div class="grid-container">
-            <div id="timer" class="box"></div>
+            <div id="timer" class="box">Score</div>
             <button id="start" class="box">Start</button>
             <button id="reset" class="box">Reset</button>
         </div>

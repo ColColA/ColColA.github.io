@@ -334,6 +334,37 @@ function search(map, start, end) {
 
 // ----functionality----
 
+function movePlayer() {
+  if (keyDown.w && player.y > 0 && !map[player.x][player.y-1].isObs) {
+    player.y--
+  }
+  if (keyDown.a && player.x > 0 && !map[player.x-1][player.y].isObs) {
+    player.x--
+  }
+  if (keyDown.s && player.y < mapSize-1 && !map[player.x][player.y+1].isObs) {
+    player.y++
+  }
+  if (keyDown.d && player.x < mapSize-1 && !map[player.x+1][player.y].isObs) {
+    player.x++
+  }
+}
+
+function moveEnemy() {
+  if (path.length >= 4) {
+    enemy.x = path[frameCount % 4].x;
+    enemy.y = path[frameCount % 4].y;
+  } else if (path.length == 3) {
+    enemy.x = path[frameCount % 3].x;
+    enemy.y = path[frameCount % 3].y;
+  }else if (path.length == 2) {
+    enemy.x = path[frameCount % 2].x;
+    enemy.y = path[frameCount % 2].y;
+  }else if (path.length == 1) {
+    enemy.x = path[0].x;
+    enemy.y = path[0].y;
+  }
+}
+
 // define player object
 let player = {
   x: mapSize-1,
@@ -393,11 +424,13 @@ window.addEventListener("keyup", function(event) {
   }
 });
 
-let isStop = false
-let resetHappening = false
-let stopPressed = false
+let isStop = false;
+let resetHappening = false;
+let stopPressed = false;
+let isEasy = true;
+let isSlow = true;
 
-document.getElementById("start").addEventListener("click", () => {
+document.getElementById("start").addEventListener("click", () => {  
   if (!resetHappening && !isStop) {
     document.getElementById("reset").innerHTML = "Stop"
     frameCount = 0;
@@ -411,6 +444,8 @@ document.getElementById("start").addEventListener("click", () => {
     goals.bottomLeft = false;
 
     isStop = true;
+
+    isSlow = isEasy
 
     requestAnimationFrame(cycle);
   }
@@ -428,6 +463,16 @@ document.getElementById("reset").addEventListener("click", () => {
     resetHappening = false;
   } else {
     stopPressed = true;
+  }
+});
+
+document.getElementById("difficulty-slider").addEventListener("change", () => {
+  let diffTag = document.getElementById("difficulty-tag")
+  isEasy = !isEasy
+  if (isEasy) {
+    diffTag.innerHTML = "Easy";
+  } else {
+    diffTag.innerHTML = "Hard";
   }
 });
 
@@ -568,32 +613,17 @@ function cycle() {
   }
   
   if (frameCount > 10) {
-    if (path.length >= 4) {
-      enemy.x = path[frameCount % 4].x;
-      enemy.y = path[frameCount % 4].y;
-    } else if (path.length == 3) {
-      enemy.x = path[frameCount % 3].x;
-      enemy.y = path[frameCount % 3].y;
-    }else if (path.length == 2) {
-      enemy.x = path[frameCount % 2].x;
-      enemy.y = path[frameCount % 2].y;
-    }else if (path.length == 1) {
-      enemy.x = path[0].x;
-      enemy.y = path[0].y;
+    if (!isSlow) {
+      moveEnemy()
+    } else if (frameCount % 2 == 0) {
+      moveEnemy()
     }
   }
 
-  if (keyDown.w && player.y > 0 && !map[player.x][player.y-1].isObs) {
-    player.y--
-  }
-  if (keyDown.a && player.x > 0 && !map[player.x-1][player.y].isObs) {
-    player.x--
-  }
-  if (keyDown.s && player.y < mapSize-1 && !map[player.x][player.y+1].isObs) {
-    player.y++
-  }
-  if (keyDown.d && player.x < mapSize-1 && !map[player.x+1][player.y].isObs) {
-    player.x++
+  if (!isSlow) {
+    movePlayer()
+  } else if (frameCount % 2 == 0) {
+    movePlayer()
   }
 
   requestAnimationFrame(cycle);
