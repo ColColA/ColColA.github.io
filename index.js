@@ -587,11 +587,6 @@ function cycle() {
     goals.topRight = true;
   }
 
-  // slow it down
-  if (frameCount % 2 == 0) {
-    score--
-  }
-
   timer.innerHTML = `Score: ${score}`
 
   if (frameCount % 4 == 0 || frameCount == 0) {
@@ -621,8 +616,10 @@ function cycle() {
   }
 
   if (!isSlow) {
+    score--
     movePlayer()
   } else if (frameCount % 2 == 0) {
+    score--
     movePlayer()
   }
 

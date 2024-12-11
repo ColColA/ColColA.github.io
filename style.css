@@ -22,8 +22,17 @@ canvas {
 }
 
 .options {
-    grid-template-columns: 320px 160px;
+    grid-template-columns: 340px 170px;
     padding-top: 10px;
+}
+
+.options-box {
+    padding: 10px;
+    background-color: #e6905e;
+    font: bold 20px Verdana;
+    text-align: center;
+    box-shadow: 5px 5px 1px #000;
+    border: 2px solid #545454;
 }
 
 .box {
@@ -52,8 +61,8 @@ button:active {
 .switch {
     position: relative;
     display: inline-block;
-    width: 60px;
-    height: 34px;
+    width: 44px;
+    height: 24px
 }
 
 .slider {
@@ -71,10 +80,10 @@ button:active {
 .slider:before {
     position: absolute;
     content: "";
-    height: 26px;
-    width: 26px;
+    height: 18px;
+    width: 18px;
     left: 4px;
-    bottom: 4px;
+    bottom: 3px;
     background-color: white;
     -webkit-transition: .4s;
     transition: .4s;
@@ -84,12 +93,8 @@ button:active {
     background-color: #e36464;
   }
   
-  input:focus + .slider {
-    box-shadow: 0 0 1px #e36464;
-  }
-  
   input:checked + .slider:before {
-    -webkit-transform: translateX(26px);
-    -ms-transform: translateX(26px);
-    transform: translateX(26px);
+    -webkit-transform: translateX(18px);
+    -ms-transform: translateX(18px);
+    transform: translateX(18px);
   }
