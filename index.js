@@ -481,7 +481,7 @@ function cycle() {
 
   // control movement speed
   if (isSlow) {
-    if (frameCount % 2.5 == 0) {
+    if (frameCount % 3 == 0) {
       cycleCount++
     }
     if (frameCount % 2 == 0) {
@@ -496,9 +496,17 @@ function cycle() {
 
   // Enemy movement
   if (path.length < 30) {
-    path = search(map, map[enemy.x][enemy.y], map[player.x][player.y]);
-    enemy.x = path[0].x;
-    enemy.y = path[0].y;
+    if (isSlow) {
+      if (frameCount % 3 == 0) {
+        path = search(map, map[enemy.x][enemy.y], map[player.x][player.y]);
+        enemy.x = path[0].x;
+        enemy.y = path[0].y;
+      }
+    } else {
+      path = search(map, map[enemy.x][enemy.y], map[player.x][player.y]);
+      enemy.x = path[0].x;
+      enemy.y = path[0].y;
+    }
   } else {
     if (cycleCount % 8 == 0) {
       path = search(map, map[enemy.x][enemy.y], map[player.x][player.y]);
