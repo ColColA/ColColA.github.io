@@ -349,22 +349,6 @@ function movePlayer() {
   }
 }
 
-function moveEnemy() {
-  if (path.length >= 4) {
-    enemy.x = path[frameCount % 4].x;
-    enemy.y = path[frameCount % 4].y;
-  } else if (path.length == 3) {
-    enemy.x = path[frameCount % 3].x;
-    enemy.y = path[frameCount % 3].y;
-  }else if (path.length == 2) {
-    enemy.x = path[frameCount % 2].x;
-    enemy.y = path[frameCount % 2].y;
-  }else if (path.length == 1) {
-    enemy.x = path[0].x;
-    enemy.y = path[0].y;
-  }
-}
-
 // define player object
 let player = {
   x: mapSize-1,
@@ -434,6 +418,7 @@ document.getElementById("start").addEventListener("click", () => {
   if (!resetHappening && !isStop) {
     document.getElementById("reset").innerHTML = "Stop"
     frameCount = 0;
+    cycleCount = 0;
     score = 1000;
     player.x = mapSize-1;
     player.y = mapSize-1;
@@ -477,8 +462,10 @@ document.getElementById("difficulty-slider").addEventListener("change", () => {
 });
 
 let frameCount = 0;
+let cycleCount = 0;
 let score = 1000;
 let timer = document.getElementById("timer")
+let alphaVal = Math.abs(Math.sin(frameCount*0.05)+0.5);
 
 let path = search(map, map[enemy.x][enemy.y], map[player.x][player.y]);
 
@@ -492,6 +479,37 @@ function cycle() {
     return undefined;
   }
 
+  // control movement speed
+  if (isSlow) {
+    if (frameCount % 2.5 == 0) {
+      cycleCount++
+    }
+    if (frameCount % 2 == 0) {
+      score--
+      movePlayer()
+    }
+  } else {
+    cycleCount++
+    score--
+    movePlayer()
+  }
+
+  // Enemy movement
+  if (path.length < 30) {
+    path = search(map, map[enemy.x][enemy.y], map[player.x][player.y]);
+    enemy.x = path[0].x;
+    enemy.y = path[0].y;
+  } else {
+    if (cycleCount % 8 == 0) {
+      path = search(map, map[enemy.x][enemy.y], map[player.x][player.y]);
+    }
+    enemy.x = path[cycleCount % 8].x;
+    enemy.y = path[cycleCount % 8].y;
+  }
+
+  // pulsing color
+  alphaVal = Math.abs(Math.sin(frameCount*0.05));
+
   // draw goals
   if (!goals.topLeft) {
     ctx.fillStyle = '#000'
@@ -501,7 +519,7 @@ function cycle() {
       2*path_size+2, 
       2*path_size+2
     );
-    ctx.fillStyle = '#FF0'
+    ctx.fillStyle = `rgba(255, 255, 0, ${alphaVal})`
     ctx.fillRect(
       0, 
       0, 
@@ -517,7 +535,7 @@ function cycle() {
       2*path_size+2, 
       2*path_size+2
     );
-    ctx.fillStyle = '#FF0'
+    ctx.fillStyle = `rgba(255, 255, 0, ${alphaVal})`
     ctx.fillRect(
       (mapSize-2)*path_size, 
       0, 
@@ -533,7 +551,7 @@ function cycle() {
       2*path_size+2, 
       2*path_size+2
     );
-    ctx.fillStyle = '#FF0'
+    ctx.fillStyle = `rgba(255, 255, 0, ${alphaVal})`
     ctx.fillRect(
       0, 
       (mapSize-2)*path_size, 
@@ -589,19 +607,14 @@ function cycle() {
 
   timer.innerHTML = `Score: ${score}`
 
-  if (frameCount % 4 == 0 || frameCount == 0) {
-    path = search(map, map[enemy.x][enemy.y], map[player.x][player.y]);
-  }
-
   if ((enemy.x == player.x && enemy.y == player.y) || score == 0 || stopPressed) {
     document.getElementById("reset").innerHTML = "Reset"
-    const timeOut = setTimeout(() => {
+    setTimeout(() => {
       timer.innerHTML = `Loser`
       gameOver(); 
       stopPressed = false;
       isStop = false;
-    }, 200)
-    timeOut()
+    }, 300)
     enemy.x = 0;
     enemy.y = 0;
     return undefined;
@@ -609,18 +622,8 @@ function cycle() {
   
   if (frameCount > 10) {
     if (!isSlow) {
-      moveEnemy()
-    } else if (frameCount % 2 == 0) {
-      moveEnemy()
+    } else if (frameCount % 2.5 == 0) {
     }
-  }
-
-  if (!isSlow) {
-    score--
-    movePlayer()
-  } else if (frameCount % 2 == 0) {
-    score--
-    movePlayer()
   }
 
   requestAnimationFrame(cycle);

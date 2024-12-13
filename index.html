@@ -4,27 +4,17 @@
         <link rel="stylesheet" href="style.css">
     </head>
     <body>
-        <div class="grid-container options">
-            <div class="options-box">
+        <div class="tutorial-container">
+            <div class="tutorial-title">
                 The Perlin Game
             </div>
-            <div class="options-box">
-                <label class="switch">
-                    <input type="checkbox" id="difficulty-slider">
-                    <span class="slider"></span>
-                </label>
-                <span id="difficulty-tag"">Easy</span>
-            </div>
+            <p class="tutorial-text">
+                This game is a test of the A* graph search algorithm and the Perlin noise map algorithm. You play as the blue pixel trying to collect the goals in the corner. Watch out for the red pixel who is trying to capture you!
+            </p>
+            <p class="tutorial-text">
+                Use W A S D as the movement controls
+            </p>
+            <a href="game.html" class="tutorial-text">Play Game</a>
         </div>
-        <div class="field">
-            <canvas id="cnvs" class="canvas"></canvas>
-        </div>
-        <div class="grid-container">
-            <div id="timer" class="box">Score</div>
-            <button id="start" class="box">Start</button>
-            <button id="reset" class="box">Reset</button>
-        </div>
-        <script src="perlin.js"></script>
-        <script src="index.js"></script>
     </body>
 </html>

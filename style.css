@@ -33,15 +33,40 @@ canvas {
     text-align: center;
     box-shadow: 5px 5px 1px #000;
     border: 2px solid #545454;
+    max-width: 600px;
 }
 
-.box {
-    padding: 10px 5px;
+.tutorial-container {
+    justify-content: center;
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(3, 200px);
+    grid-gap: 25px;
+    padding: 10px;
+}
+
+.tutorial-title {
+    grid-column: 1 / span 3;
+    padding: 10px;
     background-color: #e6905e;
     font: bold 20px Verdana;
     text-align: center;
     box-shadow: 5px 5px 1px #000;
     border: 2px solid #545454;
+    max-width: 600px;
+}
+
+.tutorial-text {
+    grid-column: 1 / span 3;
+    text-wrap: wrap;
+    padding: 10px 10px;
+    margin: auto;
+    background-color: #e6905e;
+    font: bold 20px Verdana;
+    text-align: center;
+    box-shadow: 5px 5px 1px #000;
+    border: 2px solid #545454;
+    max-width: 500px
 }
 
 button {
