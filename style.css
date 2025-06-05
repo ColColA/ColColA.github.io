@@ -1,5 +1,17 @@
+/* @font-face {
+  font-family: "LimeLight";
+  src: url('https://fonts.googleapis.com/css2?family=Limelight&display=swap');
+} */
+
+@import url('https://fonts.googleapis.com/css2?family=Limelight&display=swap');
+
 body {
-  background-color: #2d800d;
+  background-image: 
+    radial-gradient(#006E7A 13%, transparent 13%),
+    radial-gradient(#006E7A 13%, transparent 13%);
+  background-position: 0px 0px, 12px 12px;
+  background-size: 24px 24px;
+  background-color: #00A5B8;
 }
 
 a {
@@ -10,7 +22,7 @@ a {
   display: block;
   margin: auto;
   background: #fff;
-  border: 1px solid #ccc;
+  border: 3px solid #4B4448;
 }
 
 .container {
@@ -24,13 +36,13 @@ a {
   margin-bottom: 15px;
   width: 20%;
 
-  background-color: #8f0000;
-  border: 2px, Solid, #000;
+  background-color: #F46786;
+  border: 3px, Solid, #4B4448;
   border-radius: 10px;
 
-  font-family: "Helvetica";
+  font-family: "Limelight", sans-serif;
   font-size: 20px;
-  color: #d0d0d0;
+  color: #101010;
 
   display:flex;
   justify-content: center;
