@@ -47,7 +47,7 @@ let player = {
   hand: [],
   cards: [],
   value: 0,
-  money: 1000,
+  money: 100,
   bet: 0,
   isBust: false,
   blackjack: false,
@@ -62,6 +62,10 @@ let player = {
   betToChips() {
     let saveBet = player.bet;
     let chips = {
+      pinks: 0,
+      darkGreens: 0,
+      grays: 0,
+      yellows: 0,
       purples: 0,
       blacks: 0,
       greens: 0,
@@ -69,6 +73,18 @@ let player = {
       reds: 0,
       arr: []
     }
+
+    chips.pinks = Math.floor(saveBet/100000);
+    saveBet = saveBet - chips.pupinksrples*100000;
+    
+    chips.darkGreens = Math.floor(saveBet/25000);
+    saveBet = saveBet - chips.darkGreens*25000;
+
+    chips.grays = Math.floor(saveBet/5000);
+    saveBet = saveBet - chips.grays*5000;
+
+    chips.yellows = Math.floor(saveBet/1000);
+    saveBet = saveBet - chips.yellows*1000;
 
     chips.purples = Math.floor(saveBet/500);
     saveBet = saveBet - chips.purples*500;
@@ -89,6 +105,18 @@ let player = {
   updateChips() {
     player.betToChips();
 
+    for (let i = 0; i < player.chips.pinks; i++) {
+      player.chips.arr.push(new Chip(100000));
+    }
+    for (let i = 0; i < player.chips.darkGreens; i++) {
+      player.chips.arr.push(new Chip(25000));
+    }
+    for (let i = 0; i < player.chips.grays; i++) {
+      player.chips.arr.push(new Chip(5000));
+    }
+    for (let i = 0; i < player.chips.yellows; i++) {
+      player.chips.arr.push(new Chip(1000));
+    }
     for (let i = 0; i < player.chips.purples; i++) {
       player.chips.arr.push(new Chip(500));
     }
@@ -293,6 +321,18 @@ class Chip {
     } else if(this.value == 500) {
       this.fillColor = "#965E97"; 
       this.strokeColor = "#573758"
+    } else if (this.value == 1000) {
+      this.fillColor = "#E7F269"
+      this.strokeColor = "#D0E114"
+    } else if (this.value == 5000) {
+      this.fillColor = "#BBB4B9"
+      this.strokeColor = "#8B7E87"
+    } else if (this.value == 25000) {
+      this.fillColor = "#098645"
+      this.strokeColor = "#054C28"
+    } else if (this.value == 100000) {
+      this.fillColor = "#F8A0B3"
+      this.strokeColor = "#F46786"
     }
   }
 
