@@ -738,7 +738,7 @@ let reset = {
     if (roundDone) {
       this.flag = true;
 
-      ctx.fillStyle = "#61565E";
+      ctx.fillStyle = "#C5BFC5";
     }
   },
   up() {
@@ -785,6 +785,41 @@ let save = {
   }
 }
 
+let yes = {
+  flag: false,
+  down() {
+    this.flag = true;
+
+    ctx.fillStyle = "#4A4";
+  },
+  up() {
+    if (this.flag) {
+      this.flag = false;
+
+      gameStart = true;
+      player.money = parseInt(localStorage.getItem("playerMoney"));
+      requestAnimationFrame(main);
+    }
+  }
+}
+
+let no = {
+  flag: false,
+  down() {
+    this.flag = true;
+
+    ctx.fillStyle = "#A11";
+  },
+  up() {
+    if (this.flag) {
+      this.flag = false;
+
+      gameStart = true;
+      requestAnimationFrame(main);
+    }
+  }
+}
+
 // ---------------------------------------------------------------- TEXT SETUP ------------------------------------------------------------------------
 
 function buttonText() {
@@ -794,20 +829,10 @@ function buttonText() {
   ctx.fillText("DEAL", (canvasWidth/8)-28, canvasHeight-20);
   ctx.fillText("SAVE", (canvasWidth/8)-12, 65);
 
-  // // detect player bust
-  // if (player.isBust) {
-  //   ctx.fillText("BUST", (canvasWidth/3)-25, canvasHeight-140);
-  // }
-
   // display button markers
   ctx.fillText("HIT", (canvasWidth/3)-22, canvasHeight-20);
   ctx.fillText("STAY", (canvasWidth/2)-31, canvasHeight-20);
   ctx.fillText(player.bet, (2*canvasWidth/3)-20, canvasHeight-20);
-
-  // //detect dealer bust
-  // if (dealer.isBust) {   
-  //   ctx.fillText("BUST", (canvasWidth/2)-28, 170);
-  // }
 
   ctx.fillText("Bank:", 650, 520);
   ctx.fillText(player.money, 650, 550);
@@ -844,16 +869,78 @@ document.addEventListener("mousemove", (e) => {
   mouseX = e.clientX - rect.left;
   mouseY = e.clientY - rect.top;
 
-  // console.log(mouseX, mouseY);
-
 }, false);
 
 // ---------------------------------------------------------------- MAIN ------------------------------------------------------------------------
 
+window.addEventListener("load", () => {
+  if (localStorage.length == 0) {
+    requestAnimationFrame(main);
+  }
+});
+
 function onStartup() {
-  const storage = localStorage;
-  player.money = parseInt(storage.getItem("playerMoney"));
-  console.log(storage);
+
+  ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+
+  const gradient = ctx.createRadialGradient(canvasWidth/2, canvasHeight/2, 50, canvasWidth/2, canvasHeight/2, 800);
+
+  // Add three color stops
+  gradient.addColorStop(0, "#0DD36D");
+  gradient.addColorStop(0.5, "#0A994F");
+
+  ctx.fillStyle = gradient;
+
+  ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+
+  ctx.fillStyle = "#F5F4F5";
+
+  ctx.beginPath();
+  ctx.roundRect(280, 250, 240, 100, 15);
+  ctx.fill();
+  ctx.stroke();
+
+  ctx.fillStyle = "#66F5AB";
+  
+   // detect Yes button press
+  (mouseX > 300 && 
+   mouseX < 390 &&
+   mouseY > 360 && 
+   mouseY < 410 && 
+   mouseDown) ? yes.down() : yes.up();
+
+  ctx.beginPath();
+  ctx.roundRect(300, 360, 90, 50, 15);
+  ctx.fill();
+  ctx.stroke();
+
+  ctx.fillStyle = "#F46786";
+
+  (mouseX > 410 && 
+   mouseX < 500 &&
+   mouseY > 360 && 
+   mouseY < 410 && 
+   mouseDown) ? no.down() : no.up();
+
+  ctx.beginPath();
+  ctx.roundRect(410, 360, 90, 50, 15);
+  ctx.fill();
+  ctx.stroke();
+
+  ctx.fillStyle = "#111"
+  ctx.font = "20px Limelight";
+
+  ctx.fillText("Would you like to", 310, 280);
+  ctx.fillText("load your previous", 303, 305);
+  ctx.fillText("game?", 370, 330);
+
+  ctx.fillText("Yes", 325, 390);
+  ctx.fillText("No", 440, 390);
+
+
+  if (!gameStart) {
+    requestAnimationFrame(onStartup);
+  }
 }
 
 function main() {
@@ -1013,7 +1100,7 @@ function main() {
   ctx.stroke();
 
   if (roundDone) {
-    ctx.fillStyle = "#CFC9CD";
+    ctx.fillStyle = "#F5F4F5";
 
      // detect reset button press
     (mouseX > (canvasWidth/2)-100 && 
@@ -1088,5 +1175,6 @@ function main() {
 
   requestAnimationFrame(main);
 }
-requestAnimationFrame(main);
-onStartup()
+
+var gameStart = false;
+requestAnimationFrame(onStartup);
