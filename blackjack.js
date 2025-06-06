@@ -52,6 +52,10 @@ let player = {
   isBust: false,
   blackjack: false,
   chips: {
+      pinks: 0,
+      darkGreens: 0,
+      grays: 0,
+      yellows: 0,
       purples: 0,
       blacks: 0,
       greens: 0,
@@ -75,7 +79,7 @@ let player = {
     }
 
     chips.pinks = Math.floor(saveBet/100000);
-    saveBet = saveBet - chips.pupinksrples*100000;
+    saveBet = saveBet - chips.pinks*100000;
     
     chips.darkGreens = Math.floor(saveBet/25000);
     saveBet = saveBet - chips.darkGreens*25000;
